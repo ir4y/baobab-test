@@ -1,29 +1,10 @@
 import React from 'react';
 import {render} from 'react-dom';
-import Baobab from 'baobab';
-
-var tree = new Baobab({});
-
-var CursorMixin = {
-    componentWillMount: function(){
-        let tree = this.props.tree || this.rootTree;
-        for (let key in this.schema){
-            this[key] = tree.select(key);
-            if(!this.skipDefault){
-                this[key].set(this.schema[key]);
-            }
-        }
-    }
-};
+import {CursorMixin, RootStateMixin} from 'mixin';
 
 var App = React.createClass({
-    rootTree: tree,
-    mixins: [CursorMixin],
+    mixins: [CursorMixin, RootStateMixin],
     schema: {'editForm':{}, 'itemList': []},
-    componentWillMount: function(){
-        tree.on('update', (e) => this.setState(e.data));
-    },
-    getInitialState: () => tree.get(),
     onAdd: function(){
         this.itemList.push(this.editForm.get());
     },
@@ -31,13 +12,7 @@ var App = React.createClass({
         this.itemList.apply(lst => lst.filter(item => !item.selected));
     },
     onUpdate: function(){
-        this.itemList.apply(lst => lst.map(item => {
-            if(item.selected){
-                return this.editForm.get()
-            } else {
-                return item;
-            }
-        }));
+        this.itemList.apply(lst => lst.map(item => item.selected ? this.editForm.get() : item))
     },
     render: function(){
         return <div>
