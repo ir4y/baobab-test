@@ -5,36 +5,10 @@ import {CursorMixin, RootStateMixin} from 'mixin';
 var App = React.createClass({
     mixins: [CursorMixin, RootStateMixin],
     schema: {'editForm':{}, 'itemList': []},
-    onAdd: function(){
-        this.itemList.push(this.editForm.get());
-    },
-    onDelete: function(){
-        this.itemList.apply(lst => lst.filter(item => !item.selected));
-    },
-    onUpdate: function(){
-        this.itemList.apply(lst => lst.map(item => item.selected ? this.editForm.get() : item))
-    },
-    onSelectAll: function(){
-        var value = !this.isSelectAll();
-        for(let index in this.itemList.get()){
-            this.itemList.select(index).select('selected').set(value)
-        }
-    },
-    isSelectAll: function(){
-        let result = true;
-        for(let index in this.itemList.get()){
-            result &= this.itemList.select(index).select('selected').get();
-        }
-        return result;
-    },
     render: function(){
         return <div>
             <EditForm
-                onSelectAll={this.onSelectAll}
-                isSelectAll={this.isSelectAll()}
-                onAdd={this.onAdd}
-                onDelete={this.onDelete}
-                onUpdate={this.onUpdate}
+                itemList={this.itemList}
                 tree={this.editForm} />
             <ItemList cursor={this.itemList} />
         </div>
@@ -47,18 +21,38 @@ var EditForm = React.createClass({
     mixins: [CursorMixin],
     schema: itemSchema,
     onAdd: function(){
-        this.props.onAdd();
+        this.props.itemList.push(this.props.tree.get());
         this.props.tree.set(this.schema);
     },
+    onDelete: function(){
+        this.props.itemList.apply(lst => lst.filter(item => !item.selected));
+    },
+    onUpdate: function(){
+        this.props.itemList.apply(lst => lst.map(item => item.selected ? this.props.tree.get() : item))
+    },
+    onSelectAll: function(){
+        var value = !this.isSelectAll();
+        for(let index in this.props.itemList.get()){
+            this.props.itemList.select(index).select('selected').set(value)
+        }
+    },
+    isSelectAll: function(){
+        let result = true;
+        for(let index in this.props.itemList.get()){
+            result &= this.props.itemList.select(index).select('selected').get();
+        }
+        return result;
+    },
+
     render: function() {
         return <div>
             <p><label>Name</label><Input cursor={this.name}/></p>
             <p><label>ExternalId</label><Input cursor={this.externalId}/></p>
-            <input checked={this.props.isSelectAll}
-                   onChange={this.props.onSelectAll} type="checkbox" />
+            <input checked={this.isSelectAll()}
+                   onChange={this.onSelectAll} type="checkbox" />
             <button onClick={this.onAdd}>+</button>
-            <button onClick={this.props.onDelete}>-</button>
-            <button onClick={this.props.onUpdate}>\/</button>
+            <button onClick={this.onDelete}>-</button>
+            <button onClick={this.onUpdate}>\/</button>
         </div>
     }
 });
