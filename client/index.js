@@ -4,7 +4,7 @@ import {CursorMixin, RootStateMixin} from 'mixin';
 
 var App = React.createClass({
     mixins: [CursorMixin, RootStateMixin],
-    schema: {'editForm':{}, 'itemList': []},
+    schema: {editForm:{}, itemList: []},
     render: function(){
         return <div>
             <EditForm
@@ -29,6 +29,7 @@ var EditForm = React.createClass({
     },
     onUpdate: function(){
         this.props.itemList.apply(lst => lst.map(item => item.selected ? this.props.tree.get() : item))
+        this.props.tree.set(this.schema);
     },
     onSelectAll: function(){
         var value = !this.isSelectAll();
