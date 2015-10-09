@@ -14,9 +14,24 @@ var App = React.createClass({
     onUpdate: function(){
         this.itemList.apply(lst => lst.map(item => item.selected ? this.editForm.get() : item))
     },
+    onSelectAll: function(){
+        var value = !this.isSelectAll();
+        for(let index in this.itemList.get()){
+            this.itemList.select(index).select('selected').set(value)
+        }
+    },
+    isSelectAll: function(){
+        let result = true;
+        for(let index in this.itemList.get()){
+            result &= this.itemList.select(index).select('selected').get();
+        }
+        return result;
+    },
     render: function(){
         return <div>
             <EditForm
+                onSelectAll={this.onSelectAll}
+                isSelectAll={this.isSelectAll()}
                 onAdd={this.onAdd}
                 onDelete={this.onDelete}
                 onUpdate={this.onUpdate}
@@ -39,6 +54,8 @@ var EditForm = React.createClass({
         return <div>
             <p><label>Name</label><Input cursor={this.name}/></p>
             <p><label>ExternalId</label><Input cursor={this.externalId}/></p>
+            <input checked={this.props.isSelectAll}
+                   onChange={this.props.onSelectAll} type="checkbox" />
             <button onClick={this.onAdd}>+</button>
             <button onClick={this.props.onDelete}>-</button>
             <button onClick={this.props.onUpdate}>\/</button>
