@@ -7,7 +7,9 @@ var tree = new Baobab({});
 function setupCursors(tree){
     for (let key in this.schema){
         this[key] = tree.select(key);
-        this[key].set(this.schema[key]);
+        if(!this.skipDefault){
+            this[key].set(this.schema[key]);
+        }
     }
 }
 
@@ -24,11 +26,21 @@ var App = React.createClass({
     onDelete: function(){
         this.itemList.apply(lst => lst.filter(item => !item.selected));
     },
+    onUpdate: function(){
+        this.itemList.apply(lst => lst.map(item => {
+            if(item.selected){
+                return this.editForm.get()
+            } else {
+                return item;
+            }
+        }));
+    },
     render: function(){
         return <div>
             <EditForm
                 onAdd={this.onAdd}
                 onDelete={this.onDelete}
+                onUpdate={this.onUpdate}
                 tree={this.editForm} />
             <ItemList cursor={this.itemList} />
         </div>
@@ -52,6 +64,7 @@ var EditForm = React.createClass({
             <p><label>ExternalId</label><Input cursor={this.externalId}/></p>
             <button onClick={this.onAdd}>+</button>
             <button onClick={this.props.onDelete}>-</button>
+            <button onClick={this.props.onUpdate}>\/</button>
         </div>
     }
 });
@@ -71,10 +84,9 @@ function ItemList({cursor}) {
 
 var Item =  React.createClass({
     schema: itemSchema,
+    skipDefault: true, //Dirty hack
     componentWillMount: function(){
-        for (let key in this.schema){
-            this[key] = this.props.tree.select(key);
-        }
+        setupCursors.bind(this)(this.props.tree);
     },
     onClick: function(){
         this.selected.apply(c => !c);
