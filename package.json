@@ -1,0 +1,28 @@
+{
+  "name": "data",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./server",
+    "watch": "npm run start & webpack --progress --profile --colors --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^5.8.23",
+    "babel-core": "^5.8.25",
+    "babel-loader": "^5.3.2",
+    "baobab": "^2.0.0",
+    "baobab-react": "^1.0.0",
+    "co": "^4.6.0",
+    "co-fs": "^1.2.0",
+    "koa": "^1.0.0",
+    "koa-mount": "^1.3.0",
+    "koa-static": "^1.4.9",
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "webpack": "^1.12.2"
+  }
+}
