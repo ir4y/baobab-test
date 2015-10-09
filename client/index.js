@@ -4,19 +4,23 @@ import Baobab from 'baobab';
 
 var tree = new Baobab({});
 
-function setupCursors(tree){
-    for (let key in this.schema){
-        this[key] = tree.select(key);
-        if(!this.skipDefault){
-            this[key].set(this.schema[key]);
+var CursorMixin = {
+    componentWillMount: function(){
+        let tree = this.props.tree || this.rootTree;
+        for (let key in this.schema){
+            this[key] = tree.select(key);
+            if(!this.skipDefault){
+                this[key].set(this.schema[key]);
+            }
         }
     }
-}
+};
 
 var App = React.createClass({
+    rootTree: tree,
+    mixins: [CursorMixin],
     schema: {'editForm':{}, 'itemList': []},
     componentWillMount: function(){
-        setupCursors.bind(this)(tree);
         tree.on('update', (e) => this.setState(e.data));
     },
     getInitialState: () => tree.get(),
@@ -50,10 +54,8 @@ var App = React.createClass({
 var itemSchema = {name: '', externalId: '', selected: false};
 
 var EditForm = React.createClass({
+    mixins: [CursorMixin],
     schema: itemSchema,
-    componentWillMount: function(){
-        setupCursors.bind(this)(this.props.tree);
-    },
     onAdd: function(){
         this.props.onAdd();
         this.props.tree.set(this.schema);
@@ -83,11 +85,9 @@ function ItemList({cursor}) {
 }
 
 var Item =  React.createClass({
+    mixins: [CursorMixin],
     schema: itemSchema,
     skipDefault: true, //Dirty hack
-    componentWillMount: function(){
-        setupCursors.bind(this)(this.props.tree);
-    },
     onClick: function(){
         this.selected.apply(c => !c);
     },
