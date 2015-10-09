@@ -2,11 +2,27 @@ import React from 'react';
 import {render} from 'react-dom';
 import {CursorMixin, RootStateMixin} from 'mixin';
 
+function makeid(){
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for(let i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
+}
+
 var App = React.createClass({
     mixins: [CursorMixin, RootStateMixin],
     schema: {editForm:{}, itemList: []},
     render: function(){
         return <div>
+            <button onClick={() => {
+                for(let i=0; i<1000; i++){
+                    this.itemList.push({
+                        name: makeid(),
+                        externalId: makeid()
+                    });
+                }
+            }}>Load 1000 items</button>
             <EditForm
                 itemList={this.itemList}
                 tree={this.editForm} />
