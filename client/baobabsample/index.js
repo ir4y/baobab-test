@@ -15,6 +15,7 @@ var App = React.createClass({
     schema: {editForm:{}, itemList: []},
     render: function(){
         return <div>
+            <h1> Baobab JS </h1>
             <button onClick={() => {
                 for(let i=0; i<1000; i++){
                     this.itemList.push({

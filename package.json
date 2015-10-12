@@ -23,6 +23,8 @@
     "koa-static": "^1.4.9",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
+    "redux": "^3.0.2",
+    "tscope.js": "^0.1.0",
     "webpack": "^1.12.2"
   }
 }

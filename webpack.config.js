@@ -3,10 +3,10 @@ var path = require('path');
 console.log(path.join(__dirname, './assets/'));
 module.exports = {
   entry: [
-    './client',
+    './client/' + process.env.IMPL,
   ],
   resolve: {
-    modulesDirectories: ['node_modules', 'client'],
+    modulesDirectories: ['node_modules', 'client/'+ process.env.IMPL],
     extensions: ['', '.js', '.jsx'],
   },
   output: {
