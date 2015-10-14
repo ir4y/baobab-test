@@ -1,7 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 import Baobab from 'baobab';
-import mixins from 'baobab-react/mixins'
+import mixins from 'baobab-react/mixins';
 
 function makeid(){
     var text = "";
@@ -88,10 +88,31 @@ var EditForm = React.createClass({
     }
 });
 
-function Input({cursor}) {
+function Input2({cursor}) {
     let onChange = (e) => cursor.set(e.target.value);
     return <input value={cursor.get()} onChange={onChange} />
 }
+
+
+var Input = React.createClass({
+  getInitialState: function () {
+      return {value: this.props.cursor.get()};
+  },
+  componentDidMount: function () {
+      this.props.cursor.on('update',() => this.setState({value: this.props.cursor.get()}));
+  },
+  onBlur: function(e) {
+    var newValue = e.target.value;
+    this.props.cursor.set(newValue);
+  },
+  onChange: function (e) {
+    this.setState({value: e.target.value});
+  },
+  render: function() {
+    return <input onBlur={this.onBlur} onChange={this.onChange} value={this.state.value} />;
+  }
+});
+
 
 var ItemList =  React.createClass({
     // Clever component
