@@ -41,3 +41,4 @@ var SchemaBranchMixin = {
 exports.schemaBranch = {
     mixins: [SchemaBranchMixin, mixins.branch]
 };
+exports.root = mixins.root;

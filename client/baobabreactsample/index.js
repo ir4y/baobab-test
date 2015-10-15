@@ -1,8 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 import Baobab from 'baobab';
-import {root} from 'baobab-react/mixins';
-import {schemaBranch} from 'mixins';
+import {root, schemaBranch} from 'mixins';
 
 
 function makeid(){
