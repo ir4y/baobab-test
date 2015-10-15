@@ -5,7 +5,7 @@ var CursorMixin = {
         let tree = this.props.tree || this.rootTree;
         for (let key in this.schema){
             this[key] = tree.select(key);
-            if(!this.skipDefault){
+            if(!this[key].get()){
                 this[key].set(this.schema[key]);
             }
         }
